@@ -1,0 +1,321 @@
+{
+        "id": "bb2e0ae2.0ff208",
+        "type": "subflow",
+        "name": "issue",
+        "info": "Use msg.jiraId alone to fetch issue, msg.jiraId with msg.payload.update to update and msg.payload.fields to create. Uses global variables for connection.",
+        "category": "basic-jira",
+        "in": [
+            {
+                "x": 60,
+                "y": 60,
+                "wires": [
+                    {
+                        "id": "fd5df7b9.015358"
+                    }
+                ]
+            }
+        ],
+        "out": [
+            {
+                "x": 580,
+                "y": 220,
+                "wires": [
+                    {
+                        "id": "36332e28.6391ca",
+                        "port": 0
+                    }
+                ]
+            }
+        ],
+        "env": [],
+        "color": "#3FADB5",
+        "icon": "font-awesome/fa-exchange",
+        "status": {
+            "x": 740,
+            "y": 100,
+            "wires": [
+                {
+                    "id": "ed92527d.60f708",
+                    "port": 0
+                },
+                {
+                    "id": "bbd2641.132b198",
+                    "port": 0
+                },
+                {
+                    "id": "df525076.14e598",
+                    "port": 0
+                }
+            ]
+        },
+
+"flow":[
+    {
+        "id": "bb2e0ae2.0ff208",
+        "type": "subflow",
+        "name": "Issues",
+        "info": "Use msg.jiraId alone to fetch issue, msg.jiraId with msg.payload.update to update and msg.payload.fields to create. Uses global variables for connection.",
+        "category": "jira",
+        "in": [
+            {
+                "x": 60,
+                "y": 60,
+                "wires": [
+                    {
+                        "id": "fd5df7b9.015358"
+                    }
+                ]
+            }
+        ],
+        "out": [
+            {
+                "x": 580,
+                "y": 220,
+                "wires": [
+                    {
+                        "id": "36332e28.6391ca",
+                        "port": 0
+                    }
+                ]
+            }
+        ],
+        "env": [],
+        "color": "#DDAA99",
+        "icon": "font-awesome/fa-exchange",
+        "status": {
+            "x": 740,
+            "y": 100,
+            "wires": [
+                {
+                    "id": "ed92527d.60f708",
+                    "port": 0
+                },
+                {
+                    "id": "bbd2641.132b198",
+                    "port": 0
+                },
+                {
+                    "id": "df525076.14e598",
+                    "port": 0
+                }
+            ]
+        }
+    },
+    {
+        "id": "1b9c9b7d.951795",
+        "type": "http request",
+        "z": "bb2e0ae2.0ff208",
+        "name": "Fetch/Update/Create Issue",
+        "method": "use",
+        "ret": "txt",
+        "paytoqs": "ignore",
+        "url": "",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "authType": "",
+        "x": 160,
+        "y": 140,
+        "wires": [
+            [
+                "36332e28.6391ca"
+            ]
+        ]
+    },
+    {
+        "id": "42c7d1dc.b7821",
+        "type": "switch",
+        "z": "bb2e0ae2.0ff208",
+        "name": "Check Success",
+        "property": "statusCode",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "regex",
+                "v": "2[0-9]{2}",
+                "vt": "str",
+                "case": false
+            },
+            {
+                "t": "else"
+            }
+        ],
+        "checkall": "false",
+        "repair": false,
+        "outputs": 2,
+        "x": 440,
+        "y": 140,
+        "wires": [
+            [
+                "df525076.14e598"
+            ],
+            [
+                "bbd2641.132b198"
+            ]
+        ],
+        "outputLabels": [
+            "Success",
+            "Failure"
+        ]
+    },
+    {
+        "id": "fd5df7b9.015358",
+        "type": "change",
+        "z": "bb2e0ae2.0ff208",
+        "name": "Use Global Vars",
+        "rules": [
+            {
+                "t": "set",
+                "p": "url",
+                "pt": "msg",
+                "to": "jira.url",
+                "tot": "global"
+            },
+            {
+                "t": "set",
+                "p": "headers",
+                "pt": "msg",
+                "to": "jira.headers",
+                "tot": "global"
+            },
+            {
+                "t": "change",
+                "p": "url",
+                "pt": "msg",
+                "from": "{{api}}",
+                "fromt": "str",
+                "to": "issue/",
+                "tot": "str"
+            },
+            {
+                "t": "delete",
+                "p": "res",
+                "pt": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 200,
+        "y": 60,
+        "wires": [
+            [
+                "4ac32425.ba3c24"
+            ]
+        ]
+    },
+    {
+        "id": "4ac32425.ba3c24",
+        "type": "function",
+        "z": "bb2e0ae2.0ff208",
+        "name": "Determine API use",
+        "func": "let notifyAndOverride = '?notifyUsers=false';\nif(\n    msg.jiraId === undefined\n    && msg.payload.fields !== undefined\n){\n    msg.method = 'POST';\n    msg.url = msg.url + notifyAndOverride;\n} else if(\n    msg.jiraId !== undefined\n    && msg.payload.update !== undefined\n){\n    msg.method = 'PUT';\n    msg.url = msg.url + msg.jiraId + notifyAndOverride;\n} else if(\n    msg.jiraId !== undefined\n    && msg.payload.update === undefined\n){\n    msg.method = 'GET';\n    msg.url = msg.url + msg.jiraId;\n};\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 190,
+        "y": 100,
+        "wires": [
+            [
+                "1b9c9b7d.951795",
+                "ed92527d.60f708"
+            ]
+        ]
+    },
+    {
+        "id": "ed92527d.60f708",
+        "type": "change",
+        "z": "bb2e0ae2.0ff208",
+        "name": "Adding Issue",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "{\"fill\":\"yellow\",\"shape\":\"ring\",\"text\":\"HTTP request...\"}",
+                "tot": "json"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 450,
+        "y": 100,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "bbd2641.132b198",
+        "type": "change",
+        "z": "bb2e0ae2.0ff208",
+        "name": "Failure",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "{\"fill\":\"red\",\"shape\":\"ring\",\"text\":\"Failure\"}",
+                "tot": "json"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 620,
+        "y": 180,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "df525076.14e598",
+        "type": "change",
+        "z": "bb2e0ae2.0ff208",
+        "name": "Success",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "{\"fill\":\"green\",\"shape\":\"ring\",\"text\":\"Success\"}",
+                "tot": "json"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 620,
+        "y": 140,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "36332e28.6391ca",
+        "type": "function",
+        "z": "bb2e0ae2.0ff208",
+        "name": "check json",
+        "func": "if(msg.payload === '') {\n    // do nothing\n} else {\n    msg.payload = JSON.parse(msg.payload);\n};\n\ndelete msg.res;\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 210,
+        "y": 180,
+        "wires": [
+            [
+                "42c7d1dc.b7821"
+            ]
+        ]
+    }
+]}

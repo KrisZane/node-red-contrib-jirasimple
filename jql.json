@@ -1,0 +1,304 @@
+
+{
+
+        "id": "476487e8.b008b",
+        "type": "subflow",
+        "name": "jql",
+        "info": "Do JQL searches through the payload object, using the global variables for connection.\n\n{\n    \"jql\": \"project = PRODUCT AND issuetype IN ('MiR100 Robot Data', 'MiR200 Robot Data', 'MiR250 Robot Data', 'MiR500 Robot data', 'MiR1000 Robot data') AND status = 'Sent to customer' ORDER BY created ASC\"\n    ,\"fields\": [\n        \"customfield_15573\"\n        , \"customfield_10947\"\n        , \"customfield_10950\"\n        , \"customfield_15351\"\n        , \"customfield_15460\"\n        , \"customfield_13600\"\n        , \"customfield_15508\"\n        , \"customfield_15382\"\n    ]\n    ,\"maxResults\": 100\n    ,\"fieldsByKeys\": false\n    ,\"startAt\": 0\n}",
+        "category": "basic-jira",
+        "in": [
+            {
+                "x": 60,
+                "y": 60,
+                "wires": [
+                    {
+                        "id": "a2fc08d9.31ba5"
+                    }
+                ]
+            }
+        ],
+        "out": [
+            {
+                "x": 540,
+                "y": 180,
+                "wires": [
+                    {
+                        "id": "3e0a0a66.5d85be",
+                        "port": 0
+                    }
+                ]
+            }
+        ],
+        "env": [],
+        "color": "#3FADB5",
+        "icon": "font-awesome/fa-database",
+        "status": {
+            "x": 740,
+            "y": 60,
+            "wires": [
+                {
+                    "id": "277abaf5.4deb66",
+                    "port": 0
+                },
+                {
+                    "id": "61d5d709.d8e5a8",
+                    "port": 0
+                },
+                {
+                    "id": "6b7b0f8a.f80c38",
+                    "port": 0
+                }
+            ]
+        },
+
+"flow":[
+    {
+        "id": "476487e8.b008b",
+        "type": "subflow",
+        "name": "JQL",
+        "info": "Do JQL searches through the payload object, using the global variables for connection.\n\n{\n    \"jql\": \"project = PRODUCT AND issuetype IN ('MiR100 Robot Data', 'MiR200 Robot Data', 'MiR250 Robot Data', 'MiR500 Robot data', 'MiR1000 Robot data') AND status = 'Sent to customer' ORDER BY created ASC\"\n    ,\"fields\": [\n        \"customfield_15573\"\n        , \"customfield_10947\"\n        , \"customfield_10950\"\n        , \"customfield_15351\"\n        , \"customfield_15460\"\n        , \"customfield_13600\"\n        , \"customfield_15508\"\n        , \"customfield_15382\"\n    ]\n    ,\"maxResults\": 100\n    ,\"fieldsByKeys\": false\n    ,\"startAt\": 0\n}",
+        "category": "jira",
+        "in": [
+            {
+                "x": 60,
+                "y": 60,
+                "wires": [
+                    {
+                        "id": "a2fc08d9.31ba5"
+                    }
+                ]
+            }
+        ],
+        "out": [
+            {
+                "x": 540,
+                "y": 180,
+                "wires": [
+                    {
+                        "id": "3e0a0a66.5d85be",
+                        "port": 0
+                    }
+                ]
+            }
+        ],
+        "env": [],
+        "color": "#DDAA99",
+        "icon": "font-awesome/fa-database",
+        "status": {
+            "x": 740,
+            "y": 60,
+            "wires": [
+                {
+                    "id": "277abaf5.4deb66",
+                    "port": 0
+                },
+                {
+                    "id": "61d5d709.d8e5a8",
+                    "port": 0
+                },
+                {
+                    "id": "6b7b0f8a.f80c38",
+                    "port": 0
+                }
+            ]
+        }
+    },
+    {
+        "id": "392200c5.bc1778",
+        "type": "http request",
+        "z": "476487e8.b008b",
+        "name": "JQL Search",
+        "method": "GET",
+        "ret": "txt",
+        "paytoqs": "query",
+        "url": "",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "authType": "",
+        "x": 210,
+        "y": 100,
+        "wires": [
+            [
+                "79c72f6c.c15c9",
+                "3e0a0a66.5d85be"
+            ]
+        ]
+    },
+    {
+        "id": "79c72f6c.c15c9",
+        "type": "switch",
+        "z": "476487e8.b008b",
+        "name": "Check Success",
+        "property": "statusCode",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "regex",
+                "v": "2[0-9]{2}",
+                "vt": "str",
+                "case": false
+            },
+            {
+                "t": "else"
+            }
+        ],
+        "checkall": "false",
+        "repair": false,
+        "outputs": 2,
+        "x": 400,
+        "y": 100,
+        "wires": [
+            [
+                "61d5d709.d8e5a8"
+            ],
+            [
+                "6b7b0f8a.f80c38"
+            ]
+        ],
+        "outputLabels": [
+            "Success",
+            "Failure"
+        ]
+    },
+    {
+        "id": "a2fc08d9.31ba5",
+        "type": "change",
+        "z": "476487e8.b008b",
+        "name": "Use Global Vars",
+        "rules": [
+            {
+                "t": "set",
+                "p": "url",
+                "pt": "msg",
+                "to": "jira.url",
+                "tot": "global"
+            },
+            {
+                "t": "set",
+                "p": "headers",
+                "pt": "msg",
+                "to": "jira.headers",
+                "tot": "global"
+            },
+            {
+                "t": "change",
+                "p": "url",
+                "pt": "msg",
+                "from": "{{api}}",
+                "fromt": "str",
+                "to": "search",
+                "tot": "str"
+            },
+            {
+                "t": "delete",
+                "p": "res",
+                "pt": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 200,
+        "y": 60,
+        "wires": [
+            [
+                "392200c5.bc1778",
+                "277abaf5.4deb66"
+            ]
+        ]
+    },
+    {
+        "id": "277abaf5.4deb66",
+        "type": "change",
+        "z": "476487e8.b008b",
+        "name": "Searching...",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "{\"fill\":\"green\",\"shape\":\"ring\",\"text\":\"Searching...\"}",
+                "tot": "json"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 410,
+        "y": 60,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "61d5d709.d8e5a8",
+        "type": "change",
+        "z": "476487e8.b008b",
+        "name": "Search Done",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "{\"fill\":\"green\",\"shape\":\"ring\",\"text\":\"Search Complete\"}",
+                "tot": "json"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 610,
+        "y": 100,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "6b7b0f8a.f80c38",
+        "type": "change",
+        "z": "476487e8.b008b",
+        "name": "Search Failed",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "{\"fill\":\"red\",\"shape\":\"ring\",\"text\":\"Search Failed\"}",
+                "tot": "json"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 600,
+        "y": 140,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "3e0a0a66.5d85be",
+        "type": "function",
+        "z": "476487e8.b008b",
+        "name": "check json",
+        "func": "if(msg.payload === '') {\n    // do nothing\n} else {\n    msg.payload = JSON.parse(msg.payload);\n};\n\ndelete msg.res;\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 410,
+        "y": 180,
+        "wires": [
+            []
+        ]
+    }
+]}
