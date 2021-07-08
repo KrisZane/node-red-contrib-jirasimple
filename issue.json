@@ -3,7 +3,7 @@
         "type": "subflow",
         "name": "issue",
         "info": "Use msg.jiraId alone to fetch issue, msg.jiraId with msg.payload.update to update and msg.payload.fields to create. Uses global variables for connection.",
-        "category": "basic-jira",
+        "category": "jira",
         "in": [
             {
                 "x": 60,
