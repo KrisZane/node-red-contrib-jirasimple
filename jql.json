@@ -5,7 +5,7 @@
         "type": "subflow",
         "name": "jql",
         "info": "Do JQL searches through the payload object, using the global variables for connection.\n\n{\n    \"jql\": \"project = PRODUCT AND issuetype IN ('MiR100 Robot Data', 'MiR200 Robot Data', 'MiR250 Robot Data', 'MiR500 Robot data', 'MiR1000 Robot data') AND status = 'Sent to customer' ORDER BY created ASC\"\n    ,\"fields\": [\n        \"customfield_15573\"\n        , \"customfield_10947\"\n        , \"customfield_10950\"\n        , \"customfield_15351\"\n        , \"customfield_15460\"\n        , \"customfield_13600\"\n        , \"customfield_15508\"\n        , \"customfield_15382\"\n    ]\n    ,\"maxResults\": 100\n    ,\"fieldsByKeys\": false\n    ,\"startAt\": 0\n}",
-        "category": "basic-jira",
+        "category": "jira",
         "in": [
             {
                 "x": 60,
