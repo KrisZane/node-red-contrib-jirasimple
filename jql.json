@@ -1,4 +1,3 @@
-
 {
 
         "id": "476487e8.b008b",
@@ -189,11 +188,6 @@
                 "fromt": "str",
                 "to": "search",
                 "tot": "str"
-            },
-            {
-                "t": "delete",
-                "p": "res",
-                "pt": "msg"
             }
         ],
         "action": "",
@@ -290,7 +284,7 @@
         "type": "function",
         "z": "476487e8.b008b",
         "name": "check json",
-        "func": "if(msg.payload === '') {\n    // do nothing\n} else {\n    msg.payload = JSON.parse(msg.payload);\n};\n\ndelete msg.res;\n\nreturn msg;",
+        "func": "if(msg.payload === '') {\n    // do nothing\n} else {\n    msg.payload = JSON.parse(msg.payload);\n};\n\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",

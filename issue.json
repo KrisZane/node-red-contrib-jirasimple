@@ -186,11 +186,6 @@
                 "fromt": "str",
                 "to": "issue/",
                 "tot": "str"
-            },
-            {
-                "t": "delete",
-                "p": "res",
-                "pt": "msg"
             }
         ],
         "action": "",
@@ -305,7 +300,7 @@
         "type": "function",
         "z": "bb2e0ae2.0ff208",
         "name": "check json",
-        "func": "if(msg.payload === '') {\n    // do nothing\n} else {\n    msg.payload = JSON.parse(msg.payload);\n};\n\ndelete msg.res;\n\nreturn msg;",
+        "func": "if(msg.payload === '') {\n    // do nothing\n} else {\n    msg.payload = JSON.parse(msg.payload);\n};\n\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
