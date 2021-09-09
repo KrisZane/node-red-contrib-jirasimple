@@ -1,2 +1,2 @@
-# node-red-basic-jira
-A NodeRed subflow for basic Jira interactions.
+# node-red-contrib-jirasimple
+A NodeRed module for simple Jira interactions.

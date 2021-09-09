@@ -1,0 +1,24 @@
+<script type="text/javascript">
+    RED.nodes.registerType('issuec',{
+        category: 'function',
+        color: '#a6bbcf',
+        defaults: {
+            name: {value:""}
+        },
+        inputs:1,
+        outputs:1,
+        icon: "file.png",
+        label: "issuec"
+    });
+</script>
+
+<script type="text/html" data-template-name="issuec">
+    <div class="form-row">
+        <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+        <input type="text" id="node-input-name" placeholder="Name">
+    </div>
+</script>
+
+<script type="text/html" data-help-name="issuec">
+    <p>Use msg.jiraId alone to fetch issue, msg.jiraId with msg.payload.update to update and msg.payload.fields to create. Uses global variables for connection.</p>
+</script>
